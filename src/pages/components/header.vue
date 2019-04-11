@@ -2,24 +2,24 @@
     <div>
         <div class="myHeader">
             <img src="@/assets/images/logo.png" class="logo">
-            <el-menu default-active="1" mode="horizontal" class="top-el-menu">
+            <el-menu :default-active="path[0] + ''" mode="horizontal" class="top-el-menu">
                 <el-menu-item index="1">发现音乐</el-menu-item>
                 <el-menu-item index="2">我的音乐</el-menu-item>
                 <el-menu-item index="3">朋友动态</el-menu-item>
             </el-menu>
             <el-input v-model="input" prefix-icon="el-icon-search" placeholder="音乐/专辑/歌单"></el-input>
             <div class="login" v-if="!isLogin">
-                <el-button class="login-btn" type="primary" @click="handleLogin">登录</el-button>
+                <el-button class="login-btn" type="primary" @click="handleLogin" key="login-btn">登录</el-button>
             </div>
             <div class="login" v-else>
                 <span>Hi~! {{userInfo.nickname}}</span>
                 <router-link class="avatar" to="/"><img :src="userInfo.avatarUrl"></router-link>
-                <el-button class="logout-btn" type="text" @click="handleLogout">退出登录</el-button>
+                <el-button class="logout-btn" type="text" @click="handleLogout" key="logout-btn">退出登录</el-button>
             </div>
         </div>
-        <div class="header-nav">
-            <el-menu mode="horizontal" default-active="0">
-                <el-menu-item @click="handleAlert" v-for="(item, index) in navList" :key="item" :index="index + ''">{{item}}</el-menu-item>
+        <div class="header-nav" v-if="path[1]">
+            <el-menu mode="horizontal" :default-active="path[1] + ''">
+                <el-menu-item @click="handleGoto(['/', 'rankList', 'topPlayList'][index])" v-for="(item, index) in navList" :key="item" :index="index + 1 + ''">{{item}}</el-menu-item>
             </el-menu>
         </div>
     </div>
@@ -37,6 +37,7 @@ export default {
             navList: ['首页', '排行榜', '歌单']
         }
     },
+    props: ['path'],
     computed: {
         ...mapState(['userInfo'])
     },
@@ -53,6 +54,7 @@ export default {
                 var userInfo = res.data.profile
                 this.setUserInfo(userInfo)
                 this.isLogin = true
+                this.$emit('login')
             })
         },
         handleLogout () {
@@ -61,10 +63,11 @@ export default {
             }).then(res => {
                 this.setUserInfo()
                 this.isLogin = false
+                this.$emit('logout')
             })
         },
-        handleAlert () {
-            // alert(123)
+        handleGoto (path) {
+            this.$router.push(path)
         }
     },
     mounted () {
@@ -95,15 +98,15 @@ export default {
     .el-input
         position absolute
         top 28px
-        left 660px
-        width 220px
+        left 630px
+        width 280px
 
     .login
         position absolute
         top 0
-        left 910px
+        left 940px
         height 100%
-        width 300px
+        width 260px
         font-size 14px
 
         .login-btn
@@ -130,13 +133,14 @@ export default {
         .logout-btn
             position absolute
             top 50%
-            left 60%
+            left 64%
             border none
             transform translateY(-50%)
 
 .header-nav
     overflow hidden
     height 40px
+    min-width 1200px
     background-color #409EFF
 </style>
 
