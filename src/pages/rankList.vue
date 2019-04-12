@@ -25,20 +25,33 @@
                 </el-aside>
                 <el-main>
                     <el-table
-                        :data="list.slice(0, 25)"
+                        :data="list.slice(25 * (currentPage - 1), 25 * currentPage)"
                         style="width: 100%">
                         <el-table-column prop="name" label="歌曲"></el-table-column>
-                        <el-table-column label="歌手">
-                            <template slot-scope="scope">
-                                <span v-for="(item, index) of scope.row.ar" :key="item.id">{{item.name}}<i v-if="index < scope.row.ar.length-1">/</i>  </span>
+                        <el-table-column width="160px">
+                            <template>
+                                <i class="el-icon-edit"></i>
+                                <i class="el-icon-star-off"></i>
+                                <i class="el-icon-download"></i>
                             </template>
                         </el-table-column>
-                        <el-table-column label="时长">
+                        <el-table-column label="时长" width="120px">
                             <template slot-scope="scope">
                                 {{Math.floor(scope.row.dt / (1000 * 60))}}:{{Math.floor((scope.row.dt / 1000) % 60)}}
                             </template>
                         </el-table-column>
-                        </el-table>
+                        <el-table-column label="歌手" width="120px">
+                            <template slot-scope="scope">
+                                <span v-for="(item, index) of scope.row.ar" :key="item.id">{{item.name}}<b v-if="index < scope.row.ar.length-1"> / </b></span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-pagination
+                        layout="prev, pager, next"
+                        :total="list.length"
+                        :page-size="25"
+                        :current-page.sync="currentPage">
+                    </el-pagination>
                 </el-main>
             </el-container>
         </el-main>
@@ -61,7 +74,8 @@ export default {
     data () {
         return {
             isLogin: false,
-            list: []
+            list: [],
+            currentPage: 1
         }
     },
     computed: {
@@ -118,4 +132,19 @@ export default {
     font-size 20px
     font-weight bold
     color #333
+
+.el-table
+
+    td
+        padding 0
+
+        .cell
+            overflow hidden
+            line-height 40px
+            text-overflow ellipsis
+            white-space nowrap
+
+            i
+                line-height 48px
+                font-size 24px
 </style>
