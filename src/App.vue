@@ -5,8 +5,13 @@
 </template>
 
 <script>
+import player from './pages/components/player'
+
 export default {
-    name: 'App'
+    name: 'App',
+    components: {
+        player
+    }
 }
 </script>
 

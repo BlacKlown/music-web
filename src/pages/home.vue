@@ -12,12 +12,9 @@
                     </el-menu>
                 </el-header>
                 <el-main>
-                    <swiper :options="swiperOption" style="margin: 0 auto; width: 600px">
-                        <swiper-slide v-for="(items, index) of topSongs.songs" :key="'topSongs' + index" class="grid-2-4">
-                            <div v-for="item of items" :key="item.id" class="swiper-item">
-                                <img class="cover-pic" :src="item.album.picUrl" alt=""><br>
-                                {{item.name}}
-                            </div>
+                    <swiper :options="swiperOption">
+                        <swiper-slide v-for="(items, index) of topSongs.songs" :key="'topSongs' + index">
+                            <div v-for="item of items" :key="item.id">{{item.name}}</div>
                         </swiper-slide>
                     </swiper>
                 </el-main>
@@ -36,12 +33,9 @@
                     <div class="title">热门歌单</div>
                 </el-header>
                 <el-main>
-                    <swiper :options="swiperOption" style="margin: 0 auto; width: 600px">
-                        <swiper-slide v-for="(items, index) of playList" :key="'playList' + index" class="grid-2-4">
-                            <div v-for="item of items" :key="item.id" class="swiper-item">
-                                <img class="cover-pic" :src="item.coverImgUrl" alt=""><br>
-                                {{item.name}}
-                            </div>
+                    <swiper :options="swiperOption">
+                        <swiper-slide v-for="(items, index) of playList" :key="'playList' + index">
+                            <div v-for="item of items" :key="item.id">{{item.name}}</div>
                         </swiper-slide>
                     </swiper>
                 </el-main>
@@ -99,8 +93,7 @@ export default {
             playList: [],
             rankList: [],
             swiperOption: {
-                autoplay: false,
-                width: 600
+                autoplay: false
             },
             isLogin: false
         }
@@ -203,19 +196,5 @@ export default {
         .el-menu-item
             flex 1
             font-size 20px
-
-    .grid-2-4
-        display flex
-        flex-wrap: wrap
-
-        .swiper-item
-            flex 1 140px
-            width 140px
-            overflow hidden
-            text-overflow ellipsis
-            white-space nowrap
-
-            .cover-pic
-                width 140px
 
 </style>

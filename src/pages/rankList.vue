@@ -30,7 +30,7 @@
                         <el-table-column prop="name" label="歌曲"></el-table-column>
                         <el-table-column width="160px">
                             <template>
-                                <i class="el-icon-edit"></i>
+                                <i class="el-icon-caret-right"></i>
                                 <i class="el-icon-star-off"></i>
                                 <i class="el-icon-download"></i>
                             </template>

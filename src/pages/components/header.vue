@@ -5,7 +5,6 @@
             <el-menu :default-active="path[0] + ''" mode="horizontal" class="top-el-menu">
                 <el-menu-item index="1">发现音乐</el-menu-item>
                 <el-menu-item index="2">我的音乐</el-menu-item>
-                <el-menu-item index="3">朋友动态</el-menu-item>
             </el-menu>
             <el-input v-model="input" prefix-icon="el-icon-search" placeholder="音乐/专辑/歌单"></el-input>
             <div class="login" v-if="!isLogin">
@@ -146,7 +145,7 @@ export default {
 
 <style lang="stylus">
 .el-menu.top-el-menu
-    width 360px
+    width 240px
     height 90px
     margin 0 20px
     border-bottom-width 0
