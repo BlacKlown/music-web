@@ -1,6 +1,6 @@
 <template>
-    <div>
-        123123
+    <div class="player">
+        <audio src="http://m10.music.126.net/20190415144504/f0caf13acb97bf76eb6c73d2d34f2a84/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3" controls="controls"></audio>
     </div>
 </template>
 
@@ -8,42 +8,33 @@
 import { mapState, mapActions } from 'vuex'
 
 export default {
-    name: 'myHeader',
     data () {
         return {
-            input: '',
-            isLogin: false,
-            navList: ['首页', '排行榜', '歌单']
         }
     },
-    props: ['path'],
     computed: {
         ...mapState(['userInfo'])
     },
     methods: {
-        ...mapActions(['setUserInfo']),
-        handleLogout () {
-            this.$axios({
-                url: '/logout'
-            }).then(res => {
-                this.setUserInfo()
-                this.isLogin = false
-                this.$emit('logout')
-            })
-        },
-        handleGoto (path) {
-            this.$router.push(path)
-        }
+        ...mapActions(['setUserInfo'])
     },
     mounted () {
-        if (this.userInfo) {
-            this.isLogin = true
-        } else {
-            this.isLogin = false
-        }
+
     }
 }
 </script>
 
 <style lang="stylus" scoped>
+.player
+    width 100%
+    position fixed
+    bottom 0
+    z-index 10
+    height 60px
+    background-color pink
+
+    audio
+        width 600px
+        outline none
+        background-color skyblue
 </style>

@@ -1,221 +1,215 @@
 <template>
     <el-container>
         <el-header height="130px">
-            <my-header @login="login" @logout="logout" :path="[1, 1]"></my-header>
+            <div class="myHeader">
+                <img src="@/assets/images/logo.png" class="logo">
+                <el-menu :default-active="path[0]" router mode="horizontal" class="top-el-menu">
+                    <el-menu-item index="home">发现音乐</el-menu-item>
+                    <el-menu-item index="myMusic">我的音乐</el-menu-item>
+                </el-menu>
+                <el-input v-model="input" prefix-icon="el-icon-search" placeholder="音乐/专辑/歌单"></el-input>
+                <div class="login" v-if="!isLogin">
+                    <el-button class="login-btn" type="primary" @click="handleLogin" key="login-btn">登录</el-button>
+                </div>
+                <div class="login" v-else>
+                    <span>Hi~! {{userInfo.nickname}}</span>
+                    <router-link class="avatar" to="/"><img :src="userInfo.avatarUrl"></router-link>
+                    <el-button class="logout-btn" type="text" @click="handleLogout" key="logout-btn">退出登录</el-button>
+                </div>
+            </div>
+            <div class="header-nav" v-if="path[0] != 'myList'">
+                <el-menu mode="horizontal" :default-active="path[1]" router>
+                    <el-menu-item v-for="(item, index) in navList[1]" :key="item" :index="navList[0][index]">{{item}}</el-menu-item>
+                </el-menu>
+            </div>
         </el-header>
-        <el-main class="main-content">
-            <el-container>
-                <el-header height="105px">
-                    <div class="title">新歌速递</div>
-                    <el-menu mode="horizontal" default-active="0" class="swiper-controller" @select="getTopSongs">
-                        <el-menu-item v-for="item of topSongs.types" :index="item.type" :key="item.type">{{item.title}}</el-menu-item>
-                    </el-menu>
-                </el-header>
-                <el-main>
-                    <swiper :options="swiperOption" style="margin: 0 auto; width: 600px">
-                        <swiper-slide v-for="(items, index) of topSongs.songs" :key="'topSongs' + index" class="grid-2-4">
-                            <div v-for="item of items" :key="item.id" class="swiper-item">
-                                <img class="cover-pic" :src="item.album.picUrl" alt=""><br>
-                                {{item.name}}
-                            </div>
-                        </swiper-slide>
-                    </swiper>
-                </el-main>
-            </el-container>
-            <el-container v-if="isLogin">
-                <el-header height="45px">
-                    <div class="title">个性化推荐</div>
-                </el-header>
-                <el-main>
-                    <div>推荐歌曲</div>
-                    <div v-for="item of recommend" :key="item.id">{{item.name}}</div>
-                </el-main>
-            </el-container>
-            <el-container>
-                <el-header height="45px">
-                    <div class="title">热门歌单</div>
-                </el-header>
-                <el-main>
-                    <swiper :options="swiperOption" style="margin: 0 auto; width: 600px">
-                        <swiper-slide v-for="(items, index) of playList" :key="'playList' + index" class="grid-2-4">
-                            <div v-for="item of items" :key="item.id" class="swiper-item">
-                                <img class="cover-pic" :src="item.coverImgUrl" alt=""><br>
-                                {{item.name}}
-                            </div>
-                        </swiper-slide>
-                    </swiper>
-                </el-main>
-            </el-container>
-            <el-container>
-                <el-header height="45px">
-                    <div class="title">排行榜</div>
-                </el-header>
-                <el-main>
-                    <div v-for="list of rankList" :key="list.id">
-                        <div>{{list.name}}</div>
-                        <div v-for="(item, index) of list.tracks" :key="list.name + index">{{item.first}}</div>
-                    </div>
-                </el-main>
-            </el-container>
+        <el-main>
+            <router-view class="main-content" :isLogin="isLogin"/>
         </el-main>
-        <el-footer height="60px">
-
+        <el-footer>
+            <my-player></my-player>
         </el-footer>
     </el-container>
 </template>
 
 <script>
-import myHeader from './components/header'
+import myPlayer from './components/player'
 
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
-    name: 'HelloWorld',
+    name: 'index',
     components: {
-        'my-header': myHeader
+        'my-player': myPlayer
     },
     data () {
         return {
-            topSongs: {
-                types: [{
-                    type: '0',
-                    title: '全部'
-                }, {
-                    type: '7',
-                    title: '华语'
-                }, {
-                    type: '96',
-                    title: '欧美'
-                }, {
-                    type: '8',
-                    title: '日本'
-                }, {
-                    type: '16',
-                    title: '韩国'
-                }],
-                songs: []
-            },
-            recommend: [],
-            playList: [],
-            rankList: [],
-            swiperOption: {
-                autoplay: false,
-                width: 600
-            },
-            isLogin: false
+            input: '',
+            isLogin: false,
+            navList: [['home', 'rankList', 'topPlayList'], ['首页', '排行榜', '歌单']],
+            path: ['home', 'home']
         }
     },
     computed: {
         ...mapState(['userInfo'])
     },
     methods: {
-        login () {
-            this.isLogin = true
-            this.getRecommend()
-        },
-        logout () {
-            this.isLogin = false
-        },
-        getTopSongs (type = 0) {
+        ...mapActions(['setUserInfo']),
+        handleLogin () {
             this.$axios({
-                url: '/top/song',
+                url: '/login/cellphone',
                 params: {
-                    type
+                    phone: 18670297024,
+                    password: 'hb06290525'
                 }
             }).then(res => {
-                this.topSongs.songs.splice(0, 1, res.data.data.slice(0, 8))
-                this.topSongs.songs.splice(1, 1, res.data.data.slice(8, 16))
-                console.log('topSongs', this.topSongs.songs)
+                var userInfo = res.data.profile
+                this.setUserInfo(userInfo)
+                this.isLogin = true
+                this.$emit('login')
             })
         },
-        getRecommend () {
+        handleLogout () {
             this.$axios({
-                url: '/recommend/resource'
+                url: '/logout'
             }).then(res => {
-                this.recommend.splice(0, 7, ...res.data.recommend.slice(0, 7))
-                console.log('recommend', this.recommend)
+                this.setUserInfo()
+                this.isLogin = false
+                this.$emit('logout')
             })
         },
-        getTopPlayList () {
-            this.$axios({
-                url: '/top/playlist',
-                params: {
-                    limit: 16
-                }
-            }).then(res => {
-                this.playList.splice(0, 1, res.data.playlists.slice(0, 8))
-                this.playList.splice(1, 1, res.data.playlists.slice(8, 16))
-                console.log('playList', this.playList)
-            })
-        },
-        getRankLists () {
-            this.$axios({
-                url: '/toplist/detail'
-            }).then(res => {
-                let data = res.data.list
-                for (let i = 0; i < 4; i++) {
-                    let listItem = data[i]
-                    let temp = {
-                        id: listItem.id,
-                        name: listItem.name,
-                        tracks: listItem.tracks,
-                        description: listItem.description,
-                        updateFrequency: listItem.updateFrequency,
-                        coverImgUrl: listItem.coverImgUrl
-                    }
-                    this.rankList.push(temp)
-                }
-                console.log('rankList', this.rankList)
-            })
+        handleGoto (path) {
+            this.$router.push(path)
         }
     },
     mounted () {
+        this.path[1] = this.$router.history.current.name
+        if (this.navList[0].indexOf(this.path[1])) {
+            this.path[0] = 'home'
+        }
         if (this.userInfo) {
             this.isLogin = true
-            this.getRecommend()
         } else {
             this.isLogin = false
         }
-        this.getTopSongs(0)
-        this.getTopPlayList()
-        this.getRankLists()
     }
 }
 </script>
 
 <style lang="stylus" scoped>
-.el-header
+.el-header,
+.el-footer
     padding 0
+.myHeader
+    position relative
+    width 1200px
+    height 90px
+    margin 0 auto
+    font-size 0
+
+    > *
+        display inline-block
+
+    .logo
+        height 70px
+        margin 10px 0 10px 20px
+
+    .el-input
+        position absolute
+        top 28px
+        left 630px
+        width 280px
+
+    .login
+        position absolute
+        top 0
+        left 940px
+        height 100%
+        width 260px
+        font-size 14px
+
+        .login-btn
+            position absolute
+            top 50%
+            border none
+            transform translateY(-42%)
+
+        span
+            line-height 90px
+
+        .avatar
+            display inline-block
+            position relative
+            top 16px
+            left 10px
+            height 44px
+            width 44px
+            border-radius 22px
+
+            img
+                width 100%
+
+        .logout-btn
+            position absolute
+            top 50%
+            left 64%
+            border none
+            transform translateY(-50%)
+
+.header-nav
+    overflow hidden
+    height 40px
+    min-width 1200px
+    background-color #409EFF
 
 .main-content
-    text-align center
+    margin 0 auto
+</style>
 
-    .title
-        font-size 34px
-        font-weight 600
-        letter-spacing 14px
+<style lang="stylus">
+.el-menu.top-el-menu
+    width 240px
+    height 90px
+    margin 0 20px
+    border-bottom-width 0
 
-    .swiper-controller
-        display flex
-        width 500px
-        margin 0 auto
+    .el-menu-item
+        width 120px
+        height 90px
+        font-size 20px
+        color #333
+        line-height 90px
+        text-align center
+        border none
+
+    .el-menu-item:not(.is-disabled):hover
+        color #409EFF
+
+    .el-menu-item.is-active:hover,
+    .el-menu-item.is-active
+        color #fff
+        background-color #409EFF
+
+.header-nav
+
+    .el-menu
+        height 30px
+        width 692px
+        border none
+        margin 5px auto
+        background-color #409EFF
 
         .el-menu-item
-            flex 1
-            font-size 20px
+            height 100%
+            border none
+            border-radius 15px
+            margin 0 10px
+            line-height 30px
+            color #fff
 
-    .grid-2-4
-        display flex
-        flex-wrap: wrap
-
-        .swiper-item
-            flex 1 140px
-            width 140px
-            overflow hidden
-            text-overflow ellipsis
-            white-space nowrap
-
-            .cover-pic
-                width 140px
-
+        .el-menu-item:hover,
+        .el-menu-item:focus,
+        .el-menu-item.is-active
+            color #333
+            background-color #fff
 </style>

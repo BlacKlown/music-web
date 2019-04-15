@@ -1,26 +1,5 @@
 <template>
     <div>
-        <div class="myHeader">
-            <img src="@/assets/images/logo.png" class="logo">
-            <el-menu :default-active="path[0] + ''" mode="horizontal" class="top-el-menu">
-                <el-menu-item index="1">发现音乐</el-menu-item>
-                <el-menu-item index="2">我的音乐</el-menu-item>
-            </el-menu>
-            <el-input v-model="input" prefix-icon="el-icon-search" placeholder="音乐/专辑/歌单"></el-input>
-            <div class="login" v-if="!isLogin">
-                <el-button class="login-btn" type="primary" @click="handleLogin" key="login-btn">登录</el-button>
-            </div>
-            <div class="login" v-else>
-                <span>Hi~! {{userInfo.nickname}}</span>
-                <router-link class="avatar" to="/"><img :src="userInfo.avatarUrl"></router-link>
-                <el-button class="logout-btn" type="text" @click="handleLogout" key="logout-btn">退出登录</el-button>
-            </div>
-        </div>
-        <div class="header-nav" v-if="path[1]">
-            <el-menu mode="horizontal" :default-active="path[1] + ''">
-                <el-menu-item @click="handleGoto(['/', 'rankList', 'topPlayList'][index])" v-for="(item, index) in navList" :key="item" :index="index + 1 + ''">{{item}}</el-menu-item>
-            </el-menu>
-        </div>
     </div>
 </template>
 
@@ -36,7 +15,6 @@ export default {
             navList: ['首页', '排行榜', '歌单']
         }
     },
-    props: ['path'],
     computed: {
         ...mapState(['userInfo'])
     },

@@ -55,7 +55,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'rankList',
+    name: 'myMusic',
     data () {
         return {
             isLogin: false,
