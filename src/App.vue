@@ -5,15 +5,12 @@
 </template>
 
 <script>
-import player from './pages/components/player'
-
 export default {
-    name: 'App',
-    components: {
-        player
-    }
+    name: 'App'
 }
 </script>
 
-<style>
+<style lang="stylus">
+body
+    font-family Arial
 </style>
