@@ -1,6 +1,6 @@
 <template>
     <div class="player">
-        <audio src="http://m10.music.126.net/20190415144504/f0caf13acb97bf76eb6c73d2d34f2a84/ymusic/0fd6/4f65/43ed/a8772889f38dfcb91c04da915b301617.mp3"></audio>
+        <audio src=""></audio>
         <div class="player-bar">
 
         </div>

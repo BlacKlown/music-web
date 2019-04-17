@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import index from '@/pages/index'
-import home from '@/pages/home'
+import recommend from '@/pages/recommend'
 import myMusic from '@/pages/myMusic'
 import rankList from '@/pages/rankList'
 import topPlayList from '@/pages/topPlayList'
@@ -14,9 +14,9 @@ export default new Router({
         name: 'index',
         component: index,
         children: [{
-            path: '/home',
-            name: 'home',
-            component: home
+            path: '/recommend',
+            name: 'recommend',
+            component: recommend
         }, {
             path: '/rankList',
             name: 'rankList',
@@ -31,7 +31,7 @@ export default new Router({
             component: myMusic
         }, {
             path: '*',
-            redirect: '/home'
+            redirect: '/recommend'
         }]
     }]
 })

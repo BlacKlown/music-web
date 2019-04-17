@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import axios from 'axios'
 import jsCookie from 'js-cookie'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
+import VueLazyload from 'vue-lazyload'
 
 import 'element-ui/lib/theme-chalk/index.css'
 import 'swiper/dist/css/swiper.css'
@@ -22,6 +23,12 @@ Vue.prototype.$cookie = jsCookie
 Vue.use(VueAwesomeSwiper, {})
 Vue.use(ElementUI)
 Vue.config.productionTip = false
+
+Vue.use(VueLazyload, {
+    preLoad: 1,
+    loading: require('./assets/images/default.png'),
+    error: require('./assets/images/default.png')
+})
 
 /* eslint-disable no-new */
 new Vue({

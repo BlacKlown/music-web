@@ -1,11 +1,11 @@
 <template>
-    <div>
-        <el-header>
-            <div class="myHeader">
+    <el-container class="wrapper">
+        <el-header height="50px">
+            <div class="my-header">
                 <div class="title">音乐网站</div>
                 <div class="login">
                     <div v-if="!isLogin">
-                        <el-button class="login-btn" type="primary" @click="handleLogin" key="login-btn">登录</el-button>
+                        <el-button class="login-btn" type="text" @click="handleLogin" key="login-btn">登录</el-button>
                     </div>
                     <div class="login" v-else>
                         <router-link class="avatar" to="/">{{userInfo.nickname}}</router-link>
@@ -15,15 +15,24 @@
             </div>
         </el-header>
         <el-main>
-            <el-menu :default-active="'推荐'" mode="horizontal">
-                <el-menu-item v-for="item of list" :key="item"></el-menu-item>
-            </el-menu>
-            <router-view class="main-content" :isLogin="isLogin"/>
+            <el-container class="main-content">
+                <el-main>
+                    <ul class="my-nav">
+                        <router-link tag="li" :class="{ active: item.to == $router.history.current.name }" v-for="item of navList" :key="item.title" :to="item.to">{{item.title}}</router-link>
+                    </ul>
+                    <router-view class="view"/>
+                </el-main>
+                <el-aside>
+                    <div>123123</div>
+                </el-aside>
+            </el-container>
         </el-main>
         <el-footer>
             <my-player></my-player>
+            <div class="bg" :style="{ 'background-image': 'url(' + picUrl + ')' }"></div>
+            <div class="mask"></div>
         </el-footer>
-    </div>
+    </el-container>
 </template>
 
 <script>
@@ -39,7 +48,23 @@ export default {
     data () {
         return {
             isLogin: false,
-            list: ['播放列表', '推荐', '排行榜', '搜索', '历史纪录']
+            navList: [{
+                title: '播放列表',
+                to: 'playList'
+            }, {
+                title: '推荐',
+                to: 'recommend'
+            }, {
+                title: '排行榜',
+                to: 'rankList'
+            }, {
+                title: '搜索',
+                to: 'TopPlayList'
+            }, {
+                title: '历史纪录',
+                to: 'myMusic'
+            }],
+            picUrl: 'http://cdn.mtnhao.com/music/bg.jpg'
         }
     },
     computed: {
@@ -85,31 +110,75 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.el-header,
-.el-footer
-    padding 0
+@import '../assets/var.styl'
 
-.title
-    text-align center
+.wrapper
+    height 100%
+    overflow hidden
 
-.login
-    position absolute
-    right 0
+    .el-header,
+    .el-footer,
+    > .el-main
+        padding 0
 
-.nav
-    height 44px
-    margin-left 40px
+.my-header
 
-    li
-        float left
-        height 26px
-        padding 8px 16px
-        margin 0 6px
-        border 1px solid grey
-        border-radius 2px
-        font-size 14px
-        line-height 26px
-        cursor pointer
+    .title
+        text-align center
+        line-height 50px
+        color $lightColor
+        font-size 26px
+        letter-spacing 4px
+
+    .login
+        position absolute
+        right 0
+        top 0
+        width 100px
+
+.main-content
+    height 100%
+
+    .my-nav
+        overflow hidden
+        background-color rgba(0, 0, 0, 0)
+        border none
+
+        li
+            float left
+            height 18px
+            padding 10px 24px
+            border 1px solid $normalColor
+            border-radius 4px
+            margin 0 8px 0 0
+            font-size 14px
+            color $normalColor
+            background-color rgba(0, 0, 0, 0)
+            cursor pointer
+
+            &.active,
+            &:hover
+                color $lightColor
+                border-color $lightColor
+    .view
+        height calc(100% - 40px)
+
+.bg,
+.mask
+    position fixed
+    top 0
+    height 100%
+    width 100%
+
+.bg
+    z-index -2
+    background-position center center
+    filter blur(12px)
+    opacity .7
+
+.mask
+    z-index -1
+    background-color rgba(0, 0, 0, .4)
 </style>
 
 <style lang="stylus">

@@ -13,4 +13,7 @@ export default {
 <style lang="stylus">
 body
     font-family Arial
+
+#app
+    height 100%
 </style>
