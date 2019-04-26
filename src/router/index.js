@@ -34,14 +34,14 @@ export default new Router({
             name: 'playList',
             component: playList,
             meta: {
-                keepAlive: true
+                keepAlive: false
             }
         }, {
             path: '/myMusic',
             name: 'myMusic',
             component: myMusic,
             meta: {
-                keepAlive: true
+                keepAlive: false
             }
         }, {
             path: '/search',

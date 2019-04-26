@@ -61,7 +61,6 @@ export default {
                 url: '/toplist'
             }).then(res => {
                 this.list.splice(0, this.list.length, ...res.data.list)
-                console.log(this.list)
             })
         }
     },

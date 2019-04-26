@@ -1,13 +1,18 @@
 <template>
-    <el-container>
-    </el-container>
+    <div class="playList-cover">
+        <music-list :list="playList" :type="1"></music-list>
+    </div>
 </template>
 
 <script>
+import musicList from '@/components/musicList'
 import { mapState } from 'vuex'
 
 export default {
     name: 'playList',
+    components: {
+        musicList
+    },
     data () {
         return {
             isLogin: false,
@@ -15,22 +20,11 @@ export default {
         }
     },
     computed: {
-        ...mapState(['userInfo'])
+        ...mapState(['userInfo', 'playList'])
     },
     methods: {
-        login () {
-            this.isLogin = true
-        },
-        logout () {
-            this.isLogin = false
-        }
     },
     mounted () {
-        if (this.userInfo) {
-            this.isLogin = true
-        } else {
-            this.isLogin = false
-        }
     }
 }
 </script>

@@ -13,6 +13,10 @@
                 <div class="name ellipsis">
                     <span>{{item.name}}</span>
                     <div class="controller">
+                        <i @click="handlePlay(index)" class="iconfont icon-bofang icon-md"></i>
+                    </div>
+                    <div v-if="type === 1" class="controller quxiao">
+                        <i @click="handleRemove(index)" class="iconfont icon-quxiao icon-md"></i>
                     </div>
                 </div>
                 <div class="artist ellipsis">
@@ -59,7 +63,16 @@ export default {
                 this.scrollLock = true
                 this.$emit('scrollDown')
             }
-            // console.log(scrollHeight, offsetHeight, scrollTop)
+        },
+        handlePlay (index) {
+            if (this.type === 1) {
+                this.$root.$children[0].$children[0].handlePlay(index)
+            } else {
+                this.$root.$children[0].$children[0].handlePlay(-1, this.list[index].id)
+            }
+        },
+        handleRemove (index) {
+            this.$root.$children[0].$children[0].handleRemove(index)
         }
     },
     mounted () {
@@ -107,6 +120,34 @@ export default {
 
         &:hover
             color $lightColor
+
+            .name
+                position relative
+                padding-right 120px
+
+                .controller
+                    position absolute
+                    top 9px
+                    right 12px
+                    width 24px
+                    height 24px
+                    border 4px solid $normalColor
+                    border-radius 19px
+                    color $normalColor
+
+                    &:hover
+                        border-color $lightColor
+                        color $lightColor
+                        cursor pointer
+
+                    .iconfont
+                        position absolute
+                        top 50%
+                        left 50%
+                        transform translate(-50%, -50%)
+
+                .quxiao
+                    right 60px
 
     .list-content
         overflow-y auto

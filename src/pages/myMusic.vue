@@ -7,7 +7,7 @@
                 </swiper-slide>
             </swiper>
         </div>
-        <div v-else>请先登录</div>
+        <div v-else class="empty"><p>请先登录</p></div>
     </div>
 </template>
 
@@ -63,12 +63,12 @@ export default {
             this.$axios({
                 url: '/user/playlist',
                 params: {
-                    uid: this.userInfo.userId
+                    uid: this.userInfo.userId,
+                    timestamp: new Date()
                 }
             }).then(res => {
                 let playlist = res.data.playlist
                 this.myList.splice(0, playlist.length, ...res.data.playlist)
-                console.log('myList', this.myList)
             })
         }
     },
@@ -81,6 +81,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../assets/var.styl'
+
+.empty
+    display flex
+    height 100%
+    justify-content center
+    align-items center
+    font-size 16px
+    color $normalColor
 </style>
 
 <style lang="stylus">

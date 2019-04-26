@@ -16,7 +16,7 @@ export default {
     methods: {
         handleClick () {
             if (this.type) {
-                // return
+                this.$root.$children[0].$children[0].handlePlay(-1, this.info.id)
             } else {
                 this.$router.push({path: 'album/' + this.info.id})
             }

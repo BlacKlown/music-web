@@ -36,7 +36,6 @@ export default {
             }).then(res => {
                 let result = res.data.result.hots
                 this.searchHot.splice(0, 5, ...result.slice(0, 5))
-                console.log('hot', this.searchHot)
             })
         },
         handleSearch (keywords, offset = 0) {
@@ -58,7 +57,6 @@ export default {
                     } else {
                         this.songsList.splice(0, this.songsList.length, ...songs)
                     }
-                    console.log('songsList', this.songsList)
                 }
                 this.keywordsBind = this.keywordsTrue = keywords
             })

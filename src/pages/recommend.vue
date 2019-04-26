@@ -19,7 +19,7 @@
         <div class="personalized">
             <p class="title">歌单推荐</p>
             <swiper :options="personalizedSwiperOption" class="personalized-content">
-                <swiper-slide v-for="list of playList" :key="list.id">
+                <swiper-slide v-for="list of albumList" :key="list.id">
                     <list-item :info="list" :type="0"></list-item>
                 </swiper-slide>
             </swiper>
@@ -40,7 +40,7 @@ export default {
         return {
             newSongs: [],
             recommend: [],
-            playList: [],
+            albumList: [],
             swiperOption: {
                 autoplay: false,
                 height: 185,
@@ -94,11 +94,11 @@ export default {
             this.$axios({
                 url: '/top/song',
                 params: {
-                    type: 0
+                    type: 0,
+                    timestamp: new Date()
                 }
             }).then(res => {
                 this.newSongs.splice(0, 8, ...res.data.data.slice(0, 8))
-                console.log('newSongs', this.newSongs)
             })
         },
         getRecommend () {
@@ -106,18 +106,16 @@ export default {
                 url: '/recommend/resource'
             }).then(res => {
                 this.recommend.splice(0, 8, ...res.data.recommend.slice(0, 8))
-                console.log('recommend', this.recommend)
             })
         },
-        getPlayList () {
+        getAlbumList () {
             this.$axios({
                 url: '/personalized',
                 params: {
                     limit: 26
                 }
             }).then(res => {
-                this.playList.splice(0, 20, ...res.data.result.slice(0, 26))
-                console.log('playList', this.playList)
+                this.albumList.splice(0, 20, ...res.data.result.slice(0, 26))
             })
         }
     },
@@ -126,7 +124,7 @@ export default {
             this.getRecommend()
         }
         this.getTopSongs()
-        this.getPlayList()
+        this.getAlbumList()
     }
 }
 </script>
