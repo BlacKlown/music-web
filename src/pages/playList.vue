@@ -7,7 +7,7 @@
 import { mapState } from 'vuex'
 
 export default {
-    name: 'topPlayList',
+    name: 'playList',
     data () {
         return {
             isLogin: false,

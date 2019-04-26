@@ -12,7 +12,8 @@ export default {
 
 <style lang="stylus">
 body
-    font-family Arial
+    min-width 1200px
+    font-family Arial, 'Microsoft YaHei'
 
 #app
     height 100%

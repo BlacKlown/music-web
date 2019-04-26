@@ -1,7 +1,7 @@
 <template>
-    <div class="container">
-        <img class="itemPic" v-lazy="info.album.picUrl + '?param=160y160'" alt="info.name">
-        <p class="title">{{info.name}}</p>
+    <div class="container" :title="info.name" @click="handleClick">
+        <img class="itemPic" v-lazy="(info.coverImgUrl || info.picUrl || info.album.picUrl) + '?param=160y160'" :alt="info.name">
+        <p class="title ellipsis">{{info.name}}</p>
     </div>
 </template>
 
@@ -12,6 +12,15 @@ export default {
     data () {
         return {
         }
+    },
+    methods: {
+        handleClick () {
+            if (this.type) {
+                // return
+            } else {
+                this.$router.push({path: 'album/' + this.info.id})
+            }
+        }
     }
 }
 </script>
@@ -20,20 +29,24 @@ export default {
 @import '../assets/var.styl'
 
 .container
+    margin-top 20px
     text-align center
+    cursor pointer
+
+    &:hover
+
+        .title
+            color $lightColor
 
     .itemPic
         width 140px
         height 140px
 
     .title
-        overflow hidden
         width 140px
         padding 6px 0
         margin 0 auto
         font-size 14px
         color $normalColor
-        text-overflow ellipsis
-        white-space nowrap
 
 </style>

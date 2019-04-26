@@ -1,21 +1,26 @@
 <template>
-    <div class="recommend">
+    <div class="recommend-main">
         <div class="new-song">
             <p class="title">新歌速递</p>
             <swiper :options="swiperOption" class="news-content">
                 <swiper-slide v-for="song of newSongs" :key="song.id">
-                    <list-item :info="song" :type="'song'"></list-item>
+                    <list-item :info="song" :type="1"></list-item>
                 </swiper-slide>
             </swiper>
         </div>
-        <div class="new-song">
+        <div class="recommend" v-if="isLogin">
             <p class="title">个性化推荐</p>
-            <swiper :options="swiperOption" class="news-content">
-                <!-- <swiper-slide>
-                    <list-item :info="song" :type="'list'"></list-item>
-                </swiper-slide> -->
-                <swiper-slide v-for="song of recommend" :key="song.id">
-                    <list-item :info="song" :type="'song'"></list-item>
+            <swiper :options="swiperOption" class="recommend-content">
+                <swiper-slide v-for="list of recommend" :key="list.id">
+                    <list-item :info="list" :type="0"></list-item>
+                </swiper-slide>
+            </swiper>
+        </div>
+        <div class="personalized">
+            <p class="title">歌单推荐</p>
+            <swiper :options="personalizedSwiperOption" class="personalized-content">
+                <swiper-slide v-for="list of playList" :key="list.id">
+                    <list-item :info="list" :type="0"></list-item>
                 </swiper-slide>
             </swiper>
         </div>
@@ -23,29 +28,59 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import listItem from '@/components/listItem'
 
 export default {
-    name: 'home',
+    name: 'recommend',
     components: {
         listItem
     },
+    props: ['isLogin'],
     data () {
         return {
             newSongs: [],
             recommend: [],
             playList: [],
-            rankList: [],
             swiperOption: {
                 autoplay: false,
-                slidesPerView: 6,
-                height: 185
+                height: 185,
+                slidesPerView: 8,
+                watchOverflow: true,
+                breakpoints: {
+                    1340: {
+                        slidesPerView: 5
+                    },
+                    1500: {
+                        slidesPerView: 6
+                    },
+                    1640: {
+                        slidesPerView: 7
+                    }
+                }
+            },
+            personalizedSwiperOption: {
+                autoplay: false,
+                height: 185,
+                slidesPerView: 8,
+                slidesPerColumn: 4,
+                slidesPerColumnFill: 'row',
+                watchOverflow: true,
+                breakpoints: {
+                    1340: {
+                        slidesPerView: 5,
+                        slidesPerColumn: 6
+                    },
+                    1500: {
+                        slidesPerView: 6,
+                        slidesPerColumn: 5
+                    },
+                    1640: {
+                        slidesPerView: 7,
+                        slidesPerColumn: 4
+                    }
+                }
             }
         }
-    },
-    computed: {
-        ...mapState(['userInfo'])
     },
     watch: {
         isLogin () {
@@ -62,7 +97,7 @@ export default {
                     type: 0
                 }
             }).then(res => {
-                this.newSongs.splice(0, 6, ...res.data.data.slice(0, 6))
+                this.newSongs.splice(0, 8, ...res.data.data.slice(0, 8))
                 console.log('newSongs', this.newSongs)
             })
         },
@@ -70,40 +105,19 @@ export default {
             this.$axios({
                 url: '/recommend/resource'
             }).then(res => {
-                this.recommend.splice(0, 5, ...res.data.recommend.slice(0, 5))
+                this.recommend.splice(0, 8, ...res.data.recommend.slice(0, 8))
                 console.log('recommend', this.recommend)
             })
         },
-        getTopPlayList () {
+        getPlayList () {
             this.$axios({
-                url: '/top/playlist',
+                url: '/personalized',
                 params: {
-                    limit: 16
+                    limit: 26
                 }
             }).then(res => {
-                this.playList.splice(0, 1, res.data.playlists.slice(0, 8))
-                this.playList.splice(1, 1, res.data.playlists.slice(8, 16))
+                this.playList.splice(0, 20, ...res.data.result.slice(0, 26))
                 console.log('playList', this.playList)
-            })
-        },
-        getRankLists () {
-            this.$axios({
-                url: '/toplist/detail'
-            }).then(res => {
-                let data = res.data.list
-                for (let i = 0; i < 4; i++) {
-                    let listItem = data[i]
-                    let temp = {
-                        id: listItem.id,
-                        name: listItem.name,
-                        tracks: listItem.tracks,
-                        description: listItem.description,
-                        updateFrequency: listItem.updateFrequency,
-                        coverImgUrl: listItem.coverImgUrl
-                    }
-                    this.rankList.push(temp)
-                }
-                console.log('rankList', this.rankList)
             })
         }
     },
@@ -112,8 +126,7 @@ export default {
             this.getRecommend()
         }
         this.getTopSongs()
-        this.getTopPlayList()
-        this.getRankLists()
+        this.getPlayList()
     }
 }
 </script>
@@ -121,14 +134,22 @@ export default {
 <style lang="stylus" scoped>
 @import '../assets/var.styl'
 
-.recommend
+.recommend-main
     height 100%
     overflow-y scroll
 
     .title
-        padding 20px 0 10px
+        padding 10px 0 10px
         font-size 22px
         color $lightColor
         letter-spacing 4px
+
+</style>
+
+<style lang="stylus">
+.recommend-main
+
+    .swiper-container
+        width 100%
 
 </style>

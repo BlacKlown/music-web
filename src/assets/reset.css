@@ -20,6 +20,10 @@ time, mark, audio, video {
     -webkit-tap-highlight-color: transparent;
 }
 
+*:disabled {
+    cursor: not-allowed;
+}
+
 html, body {
     height: 100%;
 }
@@ -36,6 +40,10 @@ ul,ol {
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
     display: block;
+}
+
+button {
+    cursor: pointer;
 }
 
 ::-webkit-scrollbar {

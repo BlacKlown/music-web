@@ -13,6 +13,7 @@ import VueLazyload from 'vue-lazyload'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'swiper/dist/css/swiper.css'
 import './assets/reset.css'
+import './assets/iconfont.css'
 
 axios.defaults.baseURL = 'http://localhost:3000'
 axios.defaults.withCredentials = true

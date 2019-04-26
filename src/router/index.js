@@ -4,7 +4,9 @@ import index from '@/pages/index'
 import recommend from '@/pages/recommend'
 import myMusic from '@/pages/myMusic'
 import rankList from '@/pages/rankList'
-import topPlayList from '@/pages/topPlayList'
+import playList from '@/pages/playList'
+import search from '@/pages/search'
+import album from '@/pages/album'
 
 Vue.use(Router)
 
@@ -16,19 +18,45 @@ export default new Router({
         children: [{
             path: '/recommend',
             name: 'recommend',
-            component: recommend
+            component: recommend,
+            meta: {
+                keepAlive: true
+            }
         }, {
             path: '/rankList',
             name: 'rankList',
-            component: rankList
+            component: rankList,
+            meta: {
+                keepAlive: true
+            }
         }, {
-            path: '/topPlayList',
-            name: 'topPlayList',
-            component: topPlayList
+            path: '/playList',
+            name: 'playList',
+            component: playList,
+            meta: {
+                keepAlive: true
+            }
         }, {
             path: '/myMusic',
             name: 'myMusic',
-            component: myMusic
+            component: myMusic,
+            meta: {
+                keepAlive: true
+            }
+        }, {
+            path: '/search',
+            name: 'search',
+            component: search,
+            meta: {
+                keepAlive: true
+            }
+        }, {
+            path: '/album/:id',
+            name: 'album',
+            component: album,
+            meta: {
+                keepAlive: false
+            }
         }, {
             path: '*',
             redirect: '/recommend'
