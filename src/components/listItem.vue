@@ -15,10 +15,10 @@ export default {
     },
     methods: {
         handleClick () {
-            if (this.type) {
-                this.$root.$children[0].$children[0].handlePlay(-1, this.info.id)
+            if (this.type) { // type: 1为歌曲类型，0为歌单类型
+                this.$root.$children[0].$children[0].handlePlay(-1, this.info.id) // 调用播放器模块的播放方法
             } else {
-                this.$router.push({path: 'album/' + this.info.id})
+                this.$router.push({path: 'album/' + this.info.id}) // 跳转至相应的歌单页面
             }
         }
     }

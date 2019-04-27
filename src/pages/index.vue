@@ -14,7 +14,7 @@
                 </div>
                 <div class="dialog-cover" v-if="showDialog">
                     <div class="dialog">
-                        <p class="title">denglu</p>
+                        <p class="title">登录</p>
                         <p>账号: <input type="text" v-model="account"></p>
                         <p>密码: <input type="password" v-model="password"></p>
                         <el-button type="text" @click="handleLogin">登录</el-button>
@@ -62,7 +62,7 @@
                 <audio ref="audio" :src="currentMusic.url || null"></audio>
                 <div class="player-bar" :disabled="currentMusic.info">
                     <div class="btns btns-left">
-                        <i @click="playPrev" class="iconfont icon-shangyishou icon-md"></i>
+                        <i @click="playPrev" :class="{disabled: currentMusic.playMode === 1}" class="iconfont icon-shangyishou icon-md"></i>
                         <i v-if="!currentMusic.playing" @click="handleContinue" class="iconfont icon-bofang icon-lg"></i>
                         <i v-else @click="handleStop" class="iconfont icon-zanting icon-lg"></i>
                         <i @click="playNext($event)" class="iconfont icon-xiayishou icon-md"></i>
@@ -162,7 +162,8 @@ export default {
                 url: '/login/cellphone',
                 params: {
                     phone: this.account,
-                    password: this.password
+                    password: this.password,
+                    timestamp: new Date()
                 }
             }).then(res => {
                 if (res.data.code === 200) {
@@ -179,7 +180,8 @@ export default {
         },
         handleLogout () {
             this.$axios({
-                url: '/logout'
+                url: '/logout',
+                timestamp: new Date()
             }).then(res => {
                 this.setUserInfo()
                 this.likeList.splice(0, this.likeList.length)
@@ -594,6 +596,9 @@ export default {
 
             .btns-left
                 width 200px
+
+                .disabled
+                    cursor not-allowed
 
             .process
                 flex 1
