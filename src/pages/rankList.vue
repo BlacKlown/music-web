@@ -56,7 +56,7 @@ export default {
         }
     },
     methods: {
-        getList (idx) {
+        getList () {
             this.$axios({
                 url: '/toplist'
             }).then(res => {
