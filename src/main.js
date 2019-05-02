@@ -15,7 +15,7 @@ import 'swiper/dist/css/swiper.css'
 import './assets/reset.css'
 import './assets/iconfont.css'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://120.79.148.105:3000'
 axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
 
